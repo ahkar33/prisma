@@ -37,7 +37,11 @@ const createPost = async ({ title, averageRating, authorId }: any) => {
 
 const findAllUsers = async () => {
 	return await prisma.user.findMany({
-		include: {
+		// include: {
+		// 	posts: true
+		// }
+		select: {
+			name: true,
 			posts: true
 		}
 	});
