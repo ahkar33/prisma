@@ -12,6 +12,21 @@ datasource db {
 }
 
 model User {
-  id   Int    @id @default(autoincrement())
-  name String
+  id            String  @id @default(uuid())
+  name          String
+  email         String
+  isAdmin       Boolean
+  writtenPosts  Post[]  @relation("WrittenPosts")
+  favoritePosts Post[]  @relation("FavouritePosts")
+}
+
+model Post {
+  id             String   @id @default(uuid())
+  rating         Float
+  createdAt      DateTime @default(now())
+  updatedAt      DateTime @updatedAt
+  author         User?    @relation("WrittenPosts", fields: [authorId], references: [id])
+  authorId       String?
+  favouratedBy   User?    @relation("FavouritePosts", fields: [favouratedById], references: [id])
+  favouratedById String?
 }
