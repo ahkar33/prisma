@@ -1,42 +1,59 @@
 import { PrismaClient, User } from "@prisma/client";
+import { create } from "domain";
 const prisma = new PrismaClient();
 
+// await createUser({
+// 	name: "Chandler",
+// 	age: 34,
+// 	email: "chandler@gmail.com",
+// });
+
 async function main() {
-	// const user = await createUser({
-	// 	name: "Chandler",
-	// 	email: "chandler@gmail.com",
-	// 	isAdmin: false,
-	// });
-	await prisma.user.deleteMany();
-	await prisma.post.deleteMany();
+	const users =  await findAllUsers();
+	console.log(users[0]);
 }
 
-const createUser = async ({
-	name,
-	email,
-	isAdmin,
-}: {
-	name: string;
-	email: string;
-	isAdmin: boolean;
-}) => {
-	try {
-		const user = await prisma.user.create({
-			data: {
-				name,
-				email,
-				isAdmin,
-			},
-		});
-		return user;
-	} catch (error) {
-		console.log(error);
-	}
+const createUser = async ({ name, age, email }: any) => {
+	const user = await prisma.user.create({
+		data: {
+			name,
+			age,
+			email,
+		},
+	});
+	return user;
 };
 
-const findAllUsers = async() => {
-	return await prisma.user.findMany();
-}
+const createPost = async ({ title, averageRating, authorId }: any) => {
+	const post = await prisma.post.create({
+		data: {
+			title,
+			averageRating,
+			authorId,
+		},
+	});
+	return post;
+};
+
+const findAllUsers = async () => {
+	return await prisma.user.findMany({
+		include: {
+			posts: true
+		}
+	});
+};
+
+const findAllPosts = async () => {
+	return await prisma.post.findMany();
+};
+
+const deleteAllUsers = async () => {
+	await prisma.user.deleteMany();
+};
+
+const deleteAllPosts = async () => {
+	await prisma.post.deleteMany();
+};
 
 main()
 	.then(async () => {

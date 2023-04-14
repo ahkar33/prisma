@@ -1,6 +1,62 @@
 // This is your Prisma schema file,
 // learn more about it in the docs: https://pris.ly/d/prisma-schema
 
+// generator client {
+//   provider   = "prisma-client-js"
+//   engineType = "binary"
+// }
+
+// datasource db {
+//   provider = "postgresql"
+//   url      = env("DATABASE_URL")
+// }
+
+// model User {
+//   id             String          @id @default(uuid())
+//   name           String          @unique
+//   age            Int
+//   email          String
+//   role           Role            @default(BASIC)
+//   writtenPosts   Post[]          @relation("WrittenPosts")
+//   favoritePosts  Post[]          @relation("FavouritePosts")
+//   UserPreference UserPreference?
+
+//   @@unique([name, age])
+//   @@index([email])
+// }
+
+// model UserPreference {
+//   id           String  @id @default(uuid())
+//   emailUpdates Boolean
+//   user         User    @relation(fields: [userId], references: [id])
+//   userId       String  @unique
+// }
+
+// model Post {
+//   id             String     @id @default(uuid())
+//   title          String
+//   averageRating  Float
+//   createdAt      DateTime   @default(now())
+//   updatedAt      DateTime   @updatedAt
+//   author         User?      @relation("WrittenPosts", fields: [authorId], references: [id])
+//   authorId       String
+//   favouratedBy   User?      @relation("FavouritePosts", fields: [favouratedById], references: [id])
+//   favouratedById String
+//   categories     Category[]
+//   // @@id([title, authorId])
+// }
+
+// model Category {
+//   id    String @id @default(uuid())
+//   name  String
+//   posts Post[]
+// }
+
+// enum Role {
+//   BASIC
+//   ADMIN
+// }
+
 generator client {
   provider   = "prisma-client-js"
   engineType = "binary"
@@ -12,42 +68,22 @@ datasource db {
 }
 
 model User {
-  id             String          @id @default(uuid())
-  name           String          @unique
-  age            Int
-  email          String
-  isAdmin        Boolean
-  writtenPosts   Post[]          @relation("WrittenPosts")
-  favoritePosts  Post[]          @relation("FavouritePosts")
-  UserPreference UserPreference?
+  id    String @id @default(uuid())
+  name  String @unique
+  age   Int
+  email String
+  posts Post[]
 
   @@unique([name, age])
   @@index([email])
 }
 
-model UserPreference {
-  id           String  @id @default(uuid())
-  emailUpdates Boolean
-  user         User    @relation(fields: [userId], references: [id])
-  userId       String  @unique
-}
-
 model Post {
-  id             String     @id @default(uuid())
-  title          String
-  averageRating  Float
-  createdAt      DateTime   @default(now())
-  updatedAt      DateTime   @updatedAt
-  author         User?      @relation("WrittenPosts", fields: [authorId], references: [id])
-  authorId       String
-  favouratedBy   User?      @relation("FavouritePosts", fields: [favouratedById], references: [id])
-  favouratedById String
-  categories     Category[]
-  // @@id([title, authorId])
-}
-
-model Category {
-  id    String @id @default(uuid())
-  name  String
-  posts Post[]
+  id            String   @id @default(uuid())
+  title         String
+  averageRating Float
+  createdAt     DateTime @default(now())
+  updatedAt     DateTime @updatedAt
+  author        User?    @relation(fields: [authorId], references: [id])
+  authorId      String
 }
