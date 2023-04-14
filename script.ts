@@ -7,8 +7,8 @@ async function main() {
 	// 	email: "chandler@gmail.com",
 	// 	isAdmin: false,
 	// });
-	const users = await findAllUsers();
-	console.log(users );
+	await prisma.user.deleteMany();
+	await prisma.post.deleteMany();
 }
 
 const createUser = async ({
